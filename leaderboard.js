@@ -28,7 +28,8 @@ if (Meteor.isClient) {
       var tag = $(e.currentTarget);
       var tagData = { 'name':tag.prop("tagName"), 'class':tag.attr("class"),
                     'id':tag.attr("id"), 'value':tag.attr("value") };
-      _gaq.push(['_trackEvent', 'click', 'star', tagData]);
+      //console.log(tagData);
+      _gaq.push(['_trackEvent', 'click', 'star', JSON.stringify(tagData)]);
     }
   });
 
