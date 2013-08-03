@@ -9,6 +9,8 @@ if (Meteor.isClient) {
     _gaq.push(['_setAccount', 'UA-42923639-1']);
     _gaq.push(['_setDomainName', 'meteor.com']);
     _gaq.push(['_trackPageview']);
+    
+    _gaq.push(['_trackEvent', 'page', 'load', 'page loaded']);
 
     (function() {
         var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;

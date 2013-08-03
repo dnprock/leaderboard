@@ -20,9 +20,13 @@ if (Meteor.isClient) {
   Template.leaderboard.events({
     'click input.inc5': function () {
       Players.update(Session.get("selected_player"), {$inc: {score: 5}});
+      
+      _gaq.push(['_trackEvent', 'click', 'input.inc5', 'input.inc5 clicked']);
     },
     'click input.inc10': function () {
       Players.update(Session.get("selected_player"), {$inc: {score: 10}});
+      
+      _gaq.push(['_trackEvent', 'click', 'input.inc10', 'input.inc10 clicked']);
     }
   });
 
