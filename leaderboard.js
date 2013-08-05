@@ -4,6 +4,7 @@
 Players = new Meteor.Collection("players");
 
 if (Meteor.isClient) {
+  
   Template.leaderboard.players = function () {
     return Players.find({}, {sort: {score: -1, name: 1}});
   };
@@ -18,19 +19,37 @@ if (Meteor.isClient) {
   };
 
   Template.leaderboard.events({
-    'click input.inc5': function () {
-      Players.update(Session.get("selected_player"), {$inc: {score: 5}});
-    },
+    //'click input.inc5': function () {
+    //  Players.update(Session.get("selected_player"), {$inc: {score: 5}});
+    //},
     'click input.inc10': function () {
       Players.update(Session.get("selected_player"), {$inc: {score: 10}});
     },
-    'click *': function (e) {
-      var tag = $(e.currentTarget);
-      var tagData = { 'name':tag.prop("tagName"), 'class':tag.attr("class"),
-                    'id':tag.attr("id"), 'value':tag.attr("value") };
-      //console.log(tagData);
-      _gaq.push(['_trackEvent', 'click', 'star', JSON.stringify(tagData)]);
-    }
+  });
+  
+  Meteor.startup(function () {
+    $(document).ready(function() {
+      jQuery.expr[':'].regex = function(elem, index, match) {
+          var matchParams = match[3].split(','),
+              validLabels = /^(data|css):/,
+              attr = {
+                  method: matchParams[0].match(validLabels) ? 
+                              matchParams[0].split(':')[0] : 'attr',
+                  property: matchParams.shift().replace(validLabels,'')
+              },
+              regexFlags = 'ig',
+              regex = new RegExp(matchParams.join('').replace(/^\s+|\s+$/g,''), regexFlags);
+          return regex.test(jQuery(elem)[attr.method](attr.property));
+      }
+      
+      $("input:regex(class, inc*)").click(function(e) {
+        var tag = $(e.currentTarget);
+        var tagData = { 'name':tag.prop("tagName"), 'class':tag.attr("class"),
+                      'id':tag.attr("id"), 'value':tag.attr("value") };
+        console.log(tagData);
+        _gaq.push(['_trackEvent', 'click', 'star', JSON.stringify(tagData)]);
+      });
+    });
   });
 
   Template.player.events({
